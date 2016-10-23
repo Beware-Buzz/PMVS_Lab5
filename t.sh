@@ -5,6 +5,12 @@ function test {
 	echo "$3" > /proc/second
 	res=`sudo cat /dev/result`
 	echo "$1$2$3=${res}"
+	if [ "${res}" == "$4" ]; then
+		echo "OK"
+	else 
+		echo "NOT CORRECT"
+	fi
+}
 
 
 test 5 + 13 18
