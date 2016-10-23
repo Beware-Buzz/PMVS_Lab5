@@ -9,7 +9,7 @@
 
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_DESCRIPTION("Calculator");
-MODULE_AUTHOR("Yaroslav Toropov");
+MODULE_AUTHOR("Beware-Buzz");
 MODULE_VERSION("1");
 
 #define PROC_FIRST "first"
