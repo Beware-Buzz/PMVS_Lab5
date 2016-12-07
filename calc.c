@@ -54,12 +54,12 @@ static struct proc_dir_entry *proc_entry_operand;
 
 int init_module(void)
 {
-    memset(result, '0', 3);
-    proc_entry_first = proc_create( "first", 0, NULL, &proc_first_fops);
-    proc_entry_second = proc_create( "second", 0, NULL, &proc_second_fops);
-    proc_entry_operand = proc_create( "operand", 0, NULL, &proc_operand_fops);
+	memset(result, '0', 3);
+	proc_entry_first = proc_create( "first", 0, NULL, &proc_first_fops);
+	proc_entry_second = proc_create( "second", 0, NULL, &proc_second_fops);
+	proc_entry_operand = proc_create( "operand", 0, NULL, &proc_operand_fops);
 
-    Major = register_chrdev(0, DEVICE_NAME, &fops);
+	Major = register_chrdev(0, DEVICE_NAME, &fops);
 
 	if (Major < 0) {
 	  printk(KERN_ALERT "Registering char device failed with %d\n", Major);
@@ -79,70 +79,66 @@ int init_module(void)
 void cleanup_module(void)
 {
 	unregister_chrdev(Major, DEVICE_NAME);
-
-    remove_proc_entry("first", NULL);
-    remove_proc_entry("second", NULL);
-    remove_proc_entry("operand", NULL);
+    	remove_proc_entry("first", NULL);
+   	remove_proc_entry("second", NULL);
+    	remove_proc_entry("operand", NULL);
 }
 
-static ssize_t device_read(struct file *filp,	
-			   char *buffer,	
-			   size_t length,	
-			   loff_t * offset)
+static ssize_t device_read(struct file *filp, char *buffer, size_t length, loff_t * offset)
 {
-    ssize_t cnt = strlen(result), ret;
-    int nfirst;
-    int nsecond;
-    int nresult;
-    sscanf(first, "%d", &nfirst);
-    sscanf(second, "%d", &nsecond);
+    	ssize_t cnt = strlen(result), ret;
+    	int nfirst;
+    	int nsecond;
+    	int nresult;
+    	sscanf(first, "%d", &nfirst);
+    	sscanf(second, "%d", &nsecond);
 
-    if(operand[0] == 'p') {
-        nresult = nfirst * nsecond;
-        sprintf(result, "%3d", nresult);
-    }
-    else if(operand[0] == '/') {
-        nresult = nfirst / nsecond;
-        sprintf(result, "%3d", nresult);
-    }
-    else if(operand[0] == '-') {
-        nresult = nfirst - nsecond;
-        sprintf(result, "%3d", nresult);
-    }
-    else if(operand[0] == '+') {
-        nresult = nfirst + nsecond;
-        sprintf(result, "%3d", nresult);
-    }
+   	if(operand[0] == 'p') {
+        	nresult = nfirst * nsecond;
+        	sprintf(result, "%3d", nresult);
+	}
+    	else if(operand[0] == '/') {
+        	nresult = nfirst / nsecond;
+        	sprintf(result, "%3d", nresult);
+    	}
+    	else if(operand[0] == '-') {
+        	nresult = nfirst - nsecond;
+        	sprintf(result, "%3d", nresult);
+	}
+	else if(operand[0] == '+') {
+        	nresult = nfirst + nsecond;
+        	sprintf(result, "%3d", nresult);
+	}
 
-    ret = copy_to_user(buffer, result, cnt);
+    	ret = copy_to_user(buffer, result, cnt);
         *offset += cnt - ret;
 
-    if (*offset > cnt)
-        return 0;
-    else
-        return cnt;
+    	if (*offset > cnt)
+        	return 0;
+    	else
+        	return cnt;
 }
 
 static ssize_t proc_first_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
-    if ( copy_from_user(first, buff, len) ) {
-        return -EFAULT;
-    }
-    return len;
+    	if (copy_from_user(first, buff, len)) {
+        	return -EFAULT;
+    	}
+    		return len;
 }
 
 static ssize_t proc_second_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
-    if ( copy_from_user(second, buff, len) ) {
-        return -EFAULT;
-    }
-    return len;
+    	if (copy_from_user(second, buff, len)) {
+        	return -EFAULT;
+    	}
+    	return len;
 }
 
 static ssize_t proc_operand_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
-    if ( copy_from_user(operand, buff, len) ) {
-        return -EFAULT;
-    }
-    return len;
+    	if (copy_from_user(operand, buff, len)) {
+        	return -EFAULT;
+    	}
+    	return len;
 }
