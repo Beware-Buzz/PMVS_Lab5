@@ -1,28 +1,33 @@
 #!/bin/bash
-function test {
-	echo "$1" > /proc/first
-	echo "$2" > /proc/operand
-	echo "$3" > /proc/second
-	res=`sudo cat /dev/result`
-	echo "$1$2$3=${res}"
-	if [ "${res}" == "$4" ]; then
-		echo "OK"
-	else 
-		echo "NOT CORRECT"
-	fi
+insmod calculator.ko
+`dmesg | grep -m 1 'mknod' | awk -F "'" {'print $2'}`
+
+function check {
+    echo $1 > /proc/first
+    echo $2 > /proc/operand
+    echo $3 > /proc/second
+    if [ "$4" == "`cat /dev/result`" ]; then
+        echo "True!"
+    else
+        echo "False!"
+    fi
 }
 
+check 3 + 2 "  5"
+check 20 + 2 " 22"
+check 77 + 33 "110"
 
-test 5 + 13 18
-test 13 + 2 15
-test -4 + 10 6
-test 10 / 2 5
-test 10 / -2 -5
-test 8 / 2 4
-test 10 '*' 3 30
-test 10 '*' -3 -30
-test -7 '*' -7 49
-test 15 - 20 -5
-test 10 - -27 37
-test 10 - 60 -50
-test 10 - 10 0
+check 20 - 18 "  2"
+check 44 - 33 " 11"
+check 2 - 1 "  1"
+
+check 55 / 11 "  5"
+check 33 / 11 "  3"
+check 21 / 7 "  3"
+
+check 20 p 3 " 60"
+check 31 p 3 " 93"
+check 44 p 1 " 44"
+
+rmmod calculator
+rm /dev/result
