@@ -93,19 +93,19 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t length, loff_
     	sscanf(first, "%d", &nfirst);
     	sscanf(second, "%d", &nsecond);
 
-   	if(operand[0] == 'p') {
+   	if (operand[0] == 'p') {
         	nresult = nfirst * nsecond;
         	sprintf(result, "%3d", nresult);
 	}
-    	else if(operand[0] == '/') {
+    	else if (operand[0] == '/') {
         	nresult = nfirst / nsecond;
         	sprintf(result, "%3d", nresult);
     	}
-    	else if(operand[0] == '-') {
+    	else if (operand[0] == '-') {
         	nresult = nfirst - nsecond;
         	sprintf(result, "%3d", nresult);
 	}
-	else if(operand[0] == '+') {
+	else if (operand[0] == '+') {
         	nresult = nfirst + nsecond;
         	sprintf(result, "%3d", nresult);
 	}
